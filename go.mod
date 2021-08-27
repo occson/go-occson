@@ -2,4 +2,7 @@ module github.com/paweljw/go-occson
 
 go 1.14
 
-require github.com/mervick/aes-everywhere/go/aes256 v0.0.0-20210517121554-0df7e29592ae
+require (
+	github.com/mervick/aes-everywhere/go/aes256 v0.0.0-20210517121554-0df7e29592ae
+	github.com/stretchr/testify v1.7.0 // indirect
+)

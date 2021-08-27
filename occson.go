@@ -1,22 +1,24 @@
 package occson
 
 import (
-	"strings"
-	"net/http"
-	"encoding/json"
-	"io/ioutil"
 	"bytes"
-	aes "github.com/mervick/aes-everywhere/go/aes256"
+	"encoding/json"
 	"errors"
+	aes "github.com/mervick/aes-everywhere/go/aes256"
+	"io/ioutil"
+	"net/http"
+	"strings"
 )
 
 const SCHEME = "ccs://"
 const API = "https://api.occson.com/"
 
 type Document struct {
-	Uri		   string
-	Token	   string
+	Uri        string
+	Token      string
 	Passphrase string
+
+	httpClient *http.Client
 }
 
 type Response struct {
@@ -30,27 +32,26 @@ type Response struct {
 
 type Request struct {
 	EncryptedContent string `json:"encrypted_content"`
-	Force			 string   `json:"force"`
+	Force            string `json:"force"`
 }
 
 func NewDocument(uri, token, passphrase string) Document {
-	doc := Document{Uri: uri, Token: token, Passphrase: passphrase}
+	doc := Document{Uri: uri, Token: token, Passphrase: passphrase, httpClient: &http.Client{}}
 
 	return doc
 }
 
 func (doc *Document) Download() ([]byte, error) {
-	client := http.Client{}
 	req, err := http.NewRequest("GET", doc.url(), nil)
 
 	if err != nil {
 		return []byte(""), err
 	}
 
-	req.Header.Set("Authorization", "Token token=" + doc.Token)
+	req.Header.Set("Authorization", "Token token="+doc.Token)
 	req.Header.Set("Content-Type", "application/json")
 
-	res, err := client.Do(req)
+	res, err := doc.httpClient.Do(req)
 
 	if err != nil {
 		return []byte(""), err
@@ -93,17 +94,16 @@ func (doc *Document) Upload(content string, force bool) error {
 		return err
 	}
 
-	client := http.Client{}
 	req, err := http.NewRequest("POST", doc.url(), bytes.NewBuffer(jsonBody))
 
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Authorization", "Token token=" + doc.Token)
+	req.Header.Set("Authorization", "Token token="+doc.Token)
 	req.Header.Set("Content-Type", "application/json")
 
-	res, err := client.Do(req)
+	res, err := doc.httpClient.Do(req)
 
 	if err != nil {
 		return err
