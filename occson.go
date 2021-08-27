@@ -1,6 +1,0 @@
-package occson
-
-import (
-	"fmt"
-)
-
