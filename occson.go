@@ -10,37 +10,54 @@ import (
 	"strings"
 )
 
+// Defines the scheme which denotes a CCS URL.
 const SCHEME = "ccs://"
+
+// API endpoint for Occson.
 const API = "https://api.occson.com/"
 
 type Document struct {
-	Uri        string
-	Token      string
+	// URI of the document. Can and should begin with the "ccs://" schema.
+	Uri string
+	// Auth token of the appropriate workspace.
+	Token string
+	// Document passphrase.
 	Passphrase string
 
 	httpClient *http.Client
 }
 
 type Response struct {
-	Id               string
-	Path             string
+	// Requested document's internal ID.
+	Id string
+	// Requested document's path.
+	Path string
+	// Requested document's encrypted content (before decryption).
 	EncryptedContent string `json:"encrypted_content"`
-	WorkspaceId      string `json:"workspace_id"`
-	CreatedAt        string `json:"created_at"`
-	UpdatedAt        string `json:"updated_at"`
+	// Document's workspace internal ID.
+	WorkspaceId string `json:"workspace_id"`
+	// Document's creation time, in ISO8601 format.
+	CreatedAt string `json:"created_at"`
+	// Document's last update time, in ISO8601 format.
+	UpdatedAt string `json:"updated_at"`
 }
 
 type Request struct {
+	// Encrypted content for upload.
 	EncryptedContent string `json:"encrypted_content"`
-	Force            string `json:"force"`
+	// Whether the document should be overwritten, even if it exists.
+	Force string `json:"force"`
 }
 
+// Helper function to create a document struct quickly.
 func NewDocument(uri, token, passphrase string) Document {
 	doc := Document{Uri: uri, Token: token, Passphrase: passphrase, httpClient: &http.Client{}}
 
 	return doc
 }
 
+// Downloads the given document from Occson, returning its decrypted contents. Authentication
+// uses the Token field, decryption uses the Passphrase field.
 func (doc *Document) Download() ([]byte, error) {
 	req, err := http.NewRequest("GET", doc.url(), nil)
 
@@ -75,6 +92,8 @@ func (doc *Document) Download() ([]byte, error) {
 	return []byte(aes.Decrypt(response.EncryptedContent, doc.Passphrase)), nil
 }
 
+// Encrypts and uploads the given content, optionally overwriting the contents
+// already in Occson. Authentication uses the Token field, encryption uses the Passphrase field.
 func (doc *Document) Upload(content string, force bool) error {
 	ciph := aes.Encrypt(content, doc.Passphrase)
 
