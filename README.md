@@ -11,16 +11,16 @@ func main() {
 	url := "ccs://golang-test.toml"
 	token := "decafc0ffeebad"
 	passphrase := "deadbeef"
+	
+	doc := occson.NewDocument(uri, token, passphrase)
 
-	workspace := occson.Workspace{Token: token}
-
-	decrypted := workspace.Download(url, passphrase)
+	decrypted := doc.Download()
 	fmt.Println(string(decrypted))
 
 	blob := `[config]
 
 param = "some_param"`
 
-	workspace.Upload(url, passphrase, blob, true)
+	doc.Upload(blob, true)
 }
 ```

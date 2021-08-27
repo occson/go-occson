@@ -13,6 +13,12 @@ import (
 const SCHEME = "ccs://"
 const API = "https://api.occson.com/"
 
+type Document struct {
+	Uri		   string
+	Token	   string
+	Passphrase string
+}
+
 type Response struct {
 	Id               string
 	Path             string
@@ -27,21 +33,21 @@ type Request struct {
 	Force			 string   `json:"force"`
 }
 
-type Workspace struct {
-	Token	string
+func NewDocument(uri, token, passphrase string) Document {
+	doc := Document{Uri: uri, Token: token, Passphrase: passphrase}
+
+	return doc
 }
 
-func (workspace *Workspace) Download(url, passphrase string) ([]byte, error) {
-	url = strings.Replace(url, SCHEME, API, 1)
-
+func (doc *Document) Download() ([]byte, error) {
 	client := http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", doc.url(), nil)
 
 	if err != nil {
 		return []byte(""), err
 	}
 
-	req.Header.Set("Authorization", "Token token=" + workspace.Token)
+	req.Header.Set("Authorization", "Token token=" + doc.Token)
 	req.Header.Set("Content-Type", "application/json")
 
 	res, err := client.Do(req)
@@ -65,11 +71,11 @@ func (workspace *Workspace) Download(url, passphrase string) ([]byte, error) {
 		return []byte(""), err
 	}
 
-	return []byte(aes.Decrypt(response.EncryptedContent, passphrase)), nil
+	return []byte(aes.Decrypt(response.EncryptedContent, doc.Passphrase)), nil
 }
 
-func (workspace *Workspace) Upload(url, passphrase, content string, force bool) error {
-	ciph := aes.Encrypt(content, passphrase)
+func (doc *Document) Upload(content string, force bool) error {
+	ciph := aes.Encrypt(content, doc.Passphrase)
 
 	force_string := ""
 
@@ -88,13 +94,13 @@ func (workspace *Workspace) Upload(url, passphrase, content string, force bool) 
 	}
 
 	client := http.Client{}
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequest("POST", doc.url(), bytes.NewBuffer(jsonBody))
 
 	if err != nil {
 		return err
 	}
 
-	req.Header.Set("Authorization", "Token token="+ workspace.Token)
+	req.Header.Set("Authorization", "Token token=" + doc.Token)
 	req.Header.Set("Content-Type", "application/json")
 
 	res, err := client.Do(req)
@@ -116,4 +122,8 @@ func (workspace *Workspace) Upload(url, passphrase, content string, force bool) 
 	}
 
 	return nil
+}
+
+func (doc *Document) url() string {
+	return strings.Replace(doc.Uri, SCHEME, API, 1)
 }
