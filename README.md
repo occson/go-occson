@@ -1,5 +1,8 @@
 # go-occson
 
+[![Build Status](https://app.travis-ci.com/paweljw/go-occson.svg?branch=master)](https://app.travis-ci.com/paweljw/go-occson)
+[![Go Reference](https://pkg.go.dev/badge/github.com/paweljw/go-occson.svg)](https://pkg.go.dev/github.com/paweljw/go-occson)
+
 ```go
 package main
 
