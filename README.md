@@ -1,7 +1,6 @@
 # go-occson
 
-[![Build Status](https://app.travis-ci.com/paweljw/go-occson.svg?branch=master)](https://app.travis-ci.com/paweljw/go-occson)
-[![Go Reference](https://pkg.go.dev/badge/github.com/paweljw/go-occson.svg)](https://pkg.go.dev/github.com/paweljw/go-occson)
+[![Go Reference](https://pkg.go.dev/badge/github.com/occson/go-occson.svg)](https://pkg.go.dev/github.com/occson/go-occson)
 
 This package provides a client for the API of [occson.com](https://occson.com) - a configuration control system.
 
@@ -9,7 +8,7 @@ This package provides a client for the API of [occson.com](https://occson.com) -
 
 ```go
 import (
-	occson "github.com/paweljw/go-occson"
+	occson "github.com/occson/go-occson"
 )
 
 func main() {
@@ -17,13 +16,13 @@ func main() {
 	uri := "ccs://golang-test.toml"
 	token := "decafc0ffeebad"
 	passphrase := "deadbeef"
-	
+
 	// Sets up the document struct using a helper
 	doc := occson.NewDocument(uri, token, passphrase)
 
 	// Performs the actual request and decryption
 	decrypted, err := doc.Download()
-	
+
 	if err != nil {
 		panic(err)
 	}
@@ -37,14 +36,14 @@ func main() {
 
 ```go
 import (
-	occson "github.com/paweljw/go-occson"
+	occson "github.com/occson/go-occson"
 )
 
 func main() {
 	uri := "ccs://golang-test.toml"
 	token := "decafc0ffeebad"
 	passphrase := "deadbeef"
-	
+
 
 	// Sets up the document struct using a helper
 	doc := occson.NewDocument(uri, token, passphrase)
