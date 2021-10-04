@@ -1,5 +1,6 @@
 # go-occson
 
+![master CI status](https://github.com/occson/go-occson/actions/workflows/test.yml/badge.svg?branch=master)
 [![Go Reference](https://pkg.go.dev/badge/github.com/occson/go-occson.svg)](https://pkg.go.dev/github.com/occson/go-occson)
 
 This package provides a client for the API of [occson.com](https://occson.com) - a configuration control system.
