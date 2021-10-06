@@ -4,13 +4,14 @@ import (
 	"context"
 	"crypto/tls"
 	"fmt"
-	aes "github.com/mervick/aes-everywhere/go/aes256"
-	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	aes "github.com/mervick/aes-everywhere/go/aes256"
+	"github.com/stretchr/testify/assert"
 )
 
 func testingHTTPClient(handler http.Handler) (*http.Client, func()) {
@@ -44,7 +45,7 @@ var okResponse = fmt.Sprintf(`{
 var errorResponse = `{"message":"fail", "status":404}`
 
 func TestDocumentDownloadSuccess(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	token := "deadbeef"
 	passphrase := "test"
 
@@ -69,7 +70,7 @@ func TestDocumentDownloadSuccess(t *testing.T) {
 }
 
 func TestDocumentDownloadFailure(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	token := "deadbeef"
 	passphrase := "test"
 
@@ -94,7 +95,7 @@ func TestDocumentDownloadFailure(t *testing.T) {
 }
 
 func TestDocumentUploadSuccess(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	token := "deadbeef"
 	passphrase := "test"
 
@@ -123,7 +124,7 @@ func TestDocumentUploadSuccess(t *testing.T) {
 }
 
 func TestDocumentForcedUploadSuccess(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	token := "deadbeef"
 	passphrase := "test"
 
@@ -152,7 +153,7 @@ func TestDocumentForcedUploadSuccess(t *testing.T) {
 }
 
 func TestDocumentUploadFailure(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	token := "deadbeef"
 	passphrase := "test"
 
@@ -173,7 +174,7 @@ func TestDocumentUploadFailure(t *testing.T) {
 }
 
 func TestUrlConversion(t *testing.T) {
-	uri := "ccs://test.toml"
+	uri := "occson://test.toml"
 	doc := NewDocument(uri, "", "")
 
 	assert.Equal(t, doc.url(), "https://api.occson.com/test.toml")
