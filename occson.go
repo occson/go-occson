@@ -4,20 +4,21 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
-	aes "github.com/mervick/aes-everywhere/go/aes256"
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	aes "github.com/mervick/aes-everywhere/go/aes256"
 )
 
 // Defines the scheme which denotes a CCS URL.
-const SCHEME = "ccs://"
+const SCHEME = "occson://"
 
 // API endpoint for Occson.
 const API = "https://api.occson.com/"
 
 type Document struct {
-	// URI of the document. Can and should begin with the "ccs://" schema.
+	// URI of the document. Can and should begin with the "occson://" schema.
 	Uri string
 	// Auth token of the appropriate workspace.
 	Token string

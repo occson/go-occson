@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// Not sure where to get these? Check out occson.com!
-	uri := "ccs://golang-test.toml"
+	uri := "occson://golang-test.toml"
 	token := "decafc0ffeebad"
 	passphrase := "deadbeef"
 
@@ -41,7 +41,7 @@ import (
 )
 
 func main() {
-	uri := "ccs://golang-test.toml"
+	uri := "occson://golang-test.toml"
 	token := "decafc0ffeebad"
 	passphrase := "deadbeef"
 
